@@ -56,6 +56,6 @@ const baseQuerywithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQuerywithRefreshToken,
-  tagTypes: ["Bulkdelete", "SingleDelete"],
+  tagTypes: ["Bulkdelete", "SingleDelete","Updateflower"],
   endpoints: () => ({}),
 });

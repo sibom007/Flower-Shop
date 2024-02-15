@@ -23,7 +23,7 @@ const flowerApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ['Bulkdelete',"SingleDelete"],
+      providesTags: ['Bulkdelete', "SingleDelete", "Updateflower"],
     }),
     getUserflowerById: builder.query({
       query: (id) => ({
@@ -54,6 +54,7 @@ const flowerApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: userInfo,
       }),
+      invalidatesTags: ["Updateflower"]
     }),
     BulkDeleteflower: builder.mutation({
       query: (userInfo) => {

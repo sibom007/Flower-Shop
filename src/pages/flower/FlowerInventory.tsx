@@ -1,13 +1,13 @@
 import { Button, Table, TableColumnsType } from "antd";
-import { useBulkDeleteflowerMutation, useDeleteFlowerByIdMutation, useGetflowerQuery } from "../../redex/feature/flower/flowerApi";
+import { useBulkDeleteflowerMutation, useDeleteFlowerByIdMutation, useGetflowerQuery, useUpdateflowerMutation } from "../../redex/feature/flower/flowerApi";
 import React, { useState } from "react";
 import { useAppSelector } from "../../redex/hook";
 import { useCurrentToken } from "../../redex/store";
 import { varyfyToken } from "../../utils/veryfyToken";
 import { TUser } from "../../types/authSlice.Type";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { TResponse } from "../../types/global.Type";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 
 
@@ -33,6 +33,7 @@ const FlowerInventory = () => {
   const { data: Flowerdata, isFetching } = useGetflowerQuery(Params)
   const [BulkDeleteflower] = useBulkDeleteflowerMutation()
   const [DeleteFlowerById] = useDeleteFlowerByIdMutation()
+  const [updateflower] = useUpdateflowerMutation()
   const token = useAppSelector(useCurrentToken);
   let user;
   if (token) {
@@ -78,10 +79,12 @@ const FlowerInventory = () => {
       {
         title: 'Update',
         key: 'y',
-        render: () => {
+        render: (Item) => {
           return (
             <div>
-              <Button>Update</Button>
+              <Link to={`/manager/flowerinventory/${Item.key}`}>
+                <Button>Update</Button>
+              </Link>
             </div>
           );
         },
@@ -115,13 +118,13 @@ const FlowerInventory = () => {
 
 
   const tableData = Flowerdata?.data?.map(
-    ({ _id, name, price, quantity, color, size }) => ({
+    ({ _id, name, price, quantity, color, size, bloomDate, fragrance }) => ({
       key: _id,
       name,
       price,
       quantity,
       color,
-      size
+      size,
     })
   );
 
@@ -143,13 +146,11 @@ const FlowerInventory = () => {
     const ids = DeleteID;
     await BulkDeleteflower(ids)
   }
-
   const handlerSingledelete = async (id: string) => {
     const userId = { id };
     await DeleteFlowerById(userId)
     toast.success("Flower is Deleted")
   }
-
 
 
 

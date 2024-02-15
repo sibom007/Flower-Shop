@@ -1,6 +1,7 @@
 import UserDashbord from "../pages/UserDashbord";
 import AddFlower from "../pages/flower/AddFlower";
 import FlowerInventory from "../pages/flower/FlowerInventory";
+import Updateflower from "../pages/flower/Updateflower";
 
 export const ManagerPaths = [
     {
@@ -22,11 +23,11 @@ export const ManagerPaths = [
                 path: "AddFlower",
                 element: <AddFlower />,
             },
-            // {
-            //     name: "",
-            //     path: "/user/myflowerinventory/updateflower/:id",
-            //     element: <Updateflower />,
-            // },
+            {
+                name: "",
+                path: "flowerinventory/:FlowerId",
+                element: <Updateflower />,
+            },
         ],
     },
 ];

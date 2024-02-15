@@ -9,8 +9,8 @@ import { toast } from "sonner";
 
 const Updateflower = () => {
   const navigete = useNavigate();
-  const { id } = useParams();
-  const { data, isLoading } = useSingleflowerByIdQuery(id);
+  const { FlowerId } = useParams();
+  const { data, isLoading } = useSingleflowerByIdQuery(FlowerId);
   const currentdata = data?.data[0];
   const [updateflower, { isSuccess }] = useUpdateflowerMutation();
   const { register, handleSubmit, reset } = useForm();
@@ -24,7 +24,7 @@ const Updateflower = () => {
 
   const onSubmit = async (data: FieldValues) => {
     const Dataneedbacend = {
-      id: id,
+      id: FlowerId,
       name: data.name === "" ? currentdata.name : data.name,
       color: data.color === "" ? currentdata.color : data.color,
       price: data.price === "" ? currentdata.price : parseInt(data.price),
@@ -36,9 +36,8 @@ const Updateflower = () => {
       fragrance: data.fragrance === "" ? currentdata.fragrance : data.fragrance,
     };
     await updateflower(Dataneedbacend);
-
-    reset();
-    navigete("/user/myflowerinventory");
+    reset()
+    navigete("/manager/flowerinventory")
   };
 
   return (
