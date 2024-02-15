@@ -33,8 +33,6 @@ const UserDashbord = () => {
     isLoading: isLoadingYear,
     isError: isErrorYear,
   } = useSalesinYearQuery(undefined, { refetchOnMountOrArgChange: true });
-
-  console.log(salesYear);
   return (
     <div>
       <div>

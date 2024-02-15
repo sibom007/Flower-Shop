@@ -8,14 +8,22 @@ const flowerApi = baseApi.injectEndpoints({
         method: "POST",
         body: userInfo,
       }),
+
     }),
     getflower: builder.query({
       query: (filters) => {
+        let url = '/Flower';
+
+        if (filters.Searchfild && filters.search) {
+          url += `?${filters.Searchfild}=${filters.search}`;
+        }
+
         return {
-          url: `/Flower?${filters.Searchfild}=${filters.search}`,
+          url: url,
           method: "GET",
         };
       },
+      providesTags: ['Bulkdelete',"SingleDelete"],
     }),
     getUserflowerById: builder.query({
       query: (id) => ({
@@ -24,17 +32,21 @@ const flowerApi = baseApi.injectEndpoints({
       }),
     }),
     DeleteFlowerById: builder.mutation({
-      query: ({ id, ...userInfo }) => ({
-        url: `/Flower/${id}`,
-        method: "PUT",
-        body: userInfo,
-      }),
+      query: (userinfo) => {
+        return {
+          url: `/Flower/${userinfo.id}`,
+          method: "PUT",
+        }
+      },
+      invalidatesTags: ["SingleDelete"]
     }),
     SingleflowerById: builder.query({
-      query: (id) => ({
+      query: (id) => {
+        return {
         url: `/Flower/${id}`,
         method: "GET",
-      }),
+        }
+      },
     }),
     updateflower: builder.mutation({
       query: (userInfo) => ({
@@ -51,6 +63,7 @@ const flowerApi = baseApi.injectEndpoints({
           body: userInfo,
         };
       },
+      invalidatesTags: ["Bulkdelete"]
     }),
   }),
 });

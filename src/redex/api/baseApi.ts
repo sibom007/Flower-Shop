@@ -7,10 +7,10 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 import { DefaultOptionType } from "antd/es/cascader";
-import { logout } from "../feature/auth/authSlice";
+import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://asssmient-5-server.vercel.app/api",
+  baseUrl: "http://localhost:5000/api",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -28,10 +28,25 @@ const baseQuerywithRefreshToken: BaseQueryFn<
 > = async (args, api, extraOptions): Promise<any> => {
   try {
     let result = await baseQuery(args, api, extraOptions);
+
+
     if (result?.error?.status === 401) {
-      api.dispatch(logout());
+      toast.error((result?.error?.data as { message: string }).message);
       result = await baseQuery(args, api, extraOptions);
     }
+    if (result?.error?.status === 404) {
+      toast.error((result?.error?.data as { message: string }).message);
+      result = await baseQuery(args, api, extraOptions);
+    }
+    if (result?.error?.status === 400) {
+      toast.error((result?.error?.data as { message: string }).message);
+      result = await baseQuery(args, api, extraOptions);
+    }
+    if (result?.error?.status === 500) {
+      toast.error((result?.error?.data as { message: string }).message);
+      result = await baseQuery(args, api, extraOptions);
+    }
+
     return result;
   } catch (error) {
     console.log(error);
@@ -41,5 +56,6 @@ const baseQuerywithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQuerywithRefreshToken,
+  tagTypes: ["Bulkdelete", "SingleDelete"],
   endpoints: () => ({}),
 });

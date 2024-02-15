@@ -1,23 +1,34 @@
 import { Layout, Menu } from "antd";
 import { sidebarItemsGenater } from "../../utils/sideBargenater";
 import { UserPaths } from "../../routes/user.Routes";
+import { ManagerPaths } from "../../routes/manager.roites";
+import { useAppSelector } from "../../redex/hook";
+import { useCurrentToken } from "../../redex/store";
+import { varyfyToken } from "../../utils/veryfyToken";
+import { TUser } from "../../types/authSlice.Type";
+
 
 const { Sider } = Layout;
 
 const userRole = {
   USER: "user",
+  MANAGER: "manager",
 };
 
 const Sideber = () => {
-  //   const user = useAppSelector(SekectCurrentUser);
-  const user = "user";
+  const token = useAppSelector(useCurrentToken);
+  let user;
+  if (token) {
+    user = varyfyToken(token);
+  }
   let sideBarRole;
-
-  switch (user) {
+  switch ((user as TUser)!.role) {
     case userRole.USER:
       sideBarRole = sidebarItemsGenater(UserPaths, userRole.USER);
       break;
-
+    case userRole.MANAGER:
+      sideBarRole = sidebarItemsGenater(ManagerPaths, userRole.MANAGER);
+      break;
     default:
       break;
   }

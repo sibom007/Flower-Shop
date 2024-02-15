@@ -1,32 +1,165 @@
+import { Button, Table, TableColumnsType } from "antd";
+import { useBulkDeleteflowerMutation, useDeleteFlowerByIdMutation, useGetflowerQuery } from "../../redex/feature/flower/flowerApi";
+import React, { useState } from "react";
+import { useAppSelector } from "../../redex/hook";
+import { useCurrentToken } from "../../redex/store";
+import { varyfyToken } from "../../utils/veryfyToken";
+import { TUser } from "../../types/authSlice.Type";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { TResponse } from "../../types/global.Type";
 import { toast } from "sonner";
-import { useGetflowerQuery } from "../../redex/feature/flower/flowerApi";
-import { TFlower, formatBloomDate } from "../../types/Flower.Type";
-import { FieldValues, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-const FlowerInventory = () => {
-  const [sdata, setsdata] = useState({});
-  const { data, isLoading, isError, error, refetch } = useGetflowerQuery(sdata);
-  const { register, handleSubmit } = useForm();
 
-  useEffect(() => {
-    if (isLoading === true) {
-      toast.loading("loding...");
-    }
-    if (error) {
-      toast.error("Data Not Found", { duration: 1000 });
-    }
-  }, [isLoading, error, isError]);
-  const onSubmit = async (data: FieldValues) => {
-    const d = { Searchfild: data.Searchfild, search: data.search };
-    setsdata(d);
-    refetch();
-  };
+
+
+export type TDataType = {
+  _id: string
+  name: string
+  price: number
+  quantity: number
+  color: string
+  size: string
+  fragrance: string
+}
+
+
+
+
+
+const FlowerInventory = () => {
+  const { register, handleSubmit } = useForm()
+  const [DeleteButton, setDeleteButton] = useState(false)
+  const [DeleteID, setDeleteID] = useState<React.Key[]>([])
+  const [Params, setParams] = useState({})
+  const { data: Flowerdata, isFetching } = useGetflowerQuery(Params)
+  const [BulkDeleteflower] = useBulkDeleteflowerMutation()
+  const [DeleteFlowerById] = useDeleteFlowerByIdMutation()
+  const token = useAppSelector(useCurrentToken);
+  let user;
+  if (token) {
+    user = varyfyToken(token);
+  }
+
+
+  const columns: TableColumnsType<TDataType> = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+    },
+    {
+      title: 'Color',
+      dataIndex: 'color',
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+    },
+    {
+      title: 'Size',
+      dataIndex: 'size',
+    },
+    {
+      title: 'Details',
+      key: 'x',
+      render: () => {
+        return (
+          <div>
+            <Button>Details</Button>
+          </div>
+        );
+      },
+    },
+  ];
+  if ((user as TUser)!.role === 'manager') {
+    columns.push(
+      {
+        title: 'Update',
+        key: 'y',
+        render: () => {
+          return (
+            <div>
+              <Button>Update</Button>
+            </div>
+          );
+        },
+      },
+      {
+        title: 'Duplicate',
+        key: 'z',
+        render: () => {
+          return (
+            <div>
+              <Button>Duplicate</Button>
+            </div>
+          );
+        },
+      },
+      {
+        title: 'Delete',
+        key: 'd',
+        render: (Item) => {
+          return (
+            <div>
+              <Button onClick={() => handlerSingledelete(Item.key)}>Delete</Button>
+            </div>
+          );
+        },
+      }
+    );
+  }
+
+
+
+
+  const tableData = Flowerdata?.data?.map(
+    ({ _id, name, price, quantity, color, size }) => ({
+      key: _id,
+      name,
+      price,
+      quantity,
+      color,
+      size
+    })
+  );
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    setParams(data);
+  }
+
+  const rowSelection = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: TDataType[]) => {
+      if (selectedRows.length === 0) {
+        setDeleteButton(false)
+      } else {
+        setDeleteButton(true)
+      }
+      setDeleteID(selectedRowKeys)
+    },
+  }
+  const Handledelete = async () => {
+    const ids = DeleteID;
+    await BulkDeleteflower(ids)
+  }
+
+  const handlerSingledelete = async (id: string) => {
+    const userId = { id };
+    await DeleteFlowerById(userId)
+    toast.success("Flower is Deleted")
+  }
+
+
+
+
+
+
 
   return (
-    <div className="px-24 mt-10">
-      <h1 className="text-center text-2xl mb-3 font-semibold underline">
-        Flower Of Inventory
-      </h1>
+
+
+    <div className="p-20">
       <form className="flex justify-end" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <select
@@ -54,44 +187,42 @@ const FlowerInventory = () => {
           >
             Search...
           </button>
+          <div className="flex justify-end mb-2">
+            <button onClick={Handledelete} className={` ${DeleteButton === false ? 'hidden' : 'text-lg text-white font-semibold rounded-lg bg-yellow-600 hover:bg-yellow-700 duration-200 p-2'}`}>
+              Select Delete
+            </button></div>
         </div>
       </form>
-      <div className="grid sm:grid-cols-1 md:grid-cols-2 2xl:grid-cols-3  grid-cols-3 gap-5">
-        {data?.data &&
-          data?.data.map((flower: TFlower, index: number) => (
-            <div key={index} className="bg-[#eae8dc] border-4 p-5 rounded-lg">
-              <div className="rounded-md p-2">
-                <img
-                  className="aspect-w-24 aspect-h-2 rounded-2xl"
-                  src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt=""
-                />
-              </div>
-              <div className="grid sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-2 grid-cols-2 gap-3 p-3">
-                <p className="text-base text-neutral-500 font-semibold md:text-sm">
-                  Name : {flower?.name}
-                </p>
-                <p className="text-base text-neutral-500 font-semibold md:text-sm">
-                  Color : {flower?.color}
-                </p>
-                <p className="text-base text-neutral-500 font-semibold md:text-sm">
-                  BloomDate : {formatBloomDate(flower?.bloomDate)}
-                </p>
-                <p className="text-base text-neutral-500 font-semibold md:text-sm">
-                  Price : {flower?.price}
-                </p>
-                <p className="text-base text-neutral-500 font-semibold md:text-sm">
-                  Quantity : {flower?.quantity}
-                </p>
-                <p className="text-base text-neutral-500 font-semibold md:text-sm">
-                  Size : {flower?.size}
-                </p>
-              </div>
-            </div>
-          ))}
-      </div>
+      <Table
+        rowSelection={{
+          ...rowSelection,
+        }}
+        loading={isFetching}
+        columns={columns}
+        dataSource={tableData}
+      />
     </div>
+
+
   );
 };
 
 export default FlowerInventory;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
