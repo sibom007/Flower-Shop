@@ -8,6 +8,7 @@ const salseApi = baseApi.injectEndpoints({
         method: "POST",
         body: userInfo,
       }),
+      invalidatesTags: ["Sell"]
     }),
     salesinDay: builder.query({
       query: () => ({

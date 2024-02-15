@@ -23,7 +23,7 @@ const flowerApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ['Bulkdelete', "SingleDelete", "Updateflower"],
+      providesTags: ['Bulkdelete', "SingleDelete", "Updateflower","Sell"],
     }),
     getUserflowerById: builder.query({
       query: (id) => ({

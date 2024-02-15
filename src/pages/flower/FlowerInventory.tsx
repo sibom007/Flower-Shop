@@ -1,5 +1,5 @@
-import { Button, Table, TableColumnsType } from "antd";
-import { useBulkDeleteflowerMutation, useDeleteFlowerByIdMutation, useGetflowerQuery, useUpdateflowerMutation } from "../../redex/feature/flower/flowerApi";
+import { Button, Modal, Table, TableColumnsType } from "antd";
+import { useBulkDeleteflowerMutation, useDeleteFlowerByIdMutation, useGetflowerQuery } from "../../redex/feature/flower/flowerApi";
 import React, { useState } from "react";
 import { useAppSelector } from "../../redex/hook";
 import { useCurrentToken } from "../../redex/store";
@@ -8,6 +8,8 @@ import { TUser } from "../../types/authSlice.Type";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { useAddsalesMutation } from "../../redex/feature/salse/salse";
+import { TResponse } from "../../types/global.Type";
 
 
 
@@ -33,7 +35,7 @@ const FlowerInventory = () => {
   const { data: Flowerdata, isFetching } = useGetflowerQuery(Params)
   const [BulkDeleteflower] = useBulkDeleteflowerMutation()
   const [DeleteFlowerById] = useDeleteFlowerByIdMutation()
-  const [updateflower] = useUpdateflowerMutation()
+  const [addsales] = useAddsalesMutation();
   const token = useAppSelector(useCurrentToken);
   let user;
   if (token) {
@@ -73,7 +75,28 @@ const FlowerInventory = () => {
         );
       },
     },
+
   ];
+
+  if ((user as TUser)!.role === 'user') {
+    columns.push(
+      {
+        title: 'Sell',
+        key: 's',
+        render: (items) => {
+          return (
+            <div>
+              <Button
+                onBlur={() => setInputValueID(items.key)}
+                onClick={() => setModal2Open(true)}
+              >Sell</Button>
+            </div>
+          );
+        },
+      },
+    );
+  }
+
   if ((user as TUser)!.role === 'manager') {
     columns.push(
       {
@@ -153,13 +176,25 @@ const FlowerInventory = () => {
   }
 
 
+  const [modal2Open, setModal2Open] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [inputValueID, setInputValueID] = useState("");
 
-
-
+  const handleInputChange = (e: FieldValues) => {
+    setInputValue(e.target.value);
+  };
+  const handleOk = async () => {
+    const res = await addsales({
+      flowerId: inputValueID,
+      quantitySold: parseInt(inputValue),
+    }) as TResponse<any>;
+    if (res?.data?.success === true) {
+      toast.success("Sell has Done")
+    }
+    setModal2Open(false);
+  };
 
   return (
-
-
     <div className="p-20">
       <form className="flex justify-end" onSubmit={handleSubmit(onSubmit)}>
         <div>
@@ -202,6 +237,24 @@ const FlowerInventory = () => {
         columns={columns}
         dataSource={tableData}
       />
+      <Modal
+        title="For sales give the Quantity"
+        style={{ background: "#eae8dc" }}
+        centered
+        open={modal2Open}
+        onOk={handleOk}
+        onCancel={() => setModal2Open(false)}
+      >
+        <p className="ml-7 mb-2 text-lg font-semibold">Quantity</p>
+        <p className="text-center">
+          <input
+            className="p-2 w-[420px] bg-[#eae8dc] rounded-lg"
+            type="number"
+            value={inputValue}
+            onChange={handleInputChange}
+          />
+        </p>
+      </Modal>
     </div>
 
 

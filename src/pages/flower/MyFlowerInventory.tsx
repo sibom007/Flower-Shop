@@ -57,9 +57,9 @@ const MyFlowerInventory = () => {
   const handleBulkDelete = async () => {
     const ids = bulkDeleteData;
     await BulkDeleteflower(ids);
-
     refetch();
   };
+  
   const [addsales] = useAddsalesMutation();
   const [modal2Open, setModal2Open] = useState(false);
   const [inputValue, setInputValue] = useState("");
