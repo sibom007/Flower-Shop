@@ -1,5 +1,5 @@
-import UserDashbord from "../pages/UserDashbord";
 import AddFlower from "../pages/flower/AddFlower";
+import Dashbord from "../pages/flower/Dashbord";
 import FlowerInventory from "../pages/flower/FlowerInventory";
 import Updateflower from "../pages/flower/Updateflower";
 
@@ -7,7 +7,7 @@ export const ManagerPaths = [
     {
         name: "Dashboard",
         path: "dashboard",
-        element: <UserDashbord />,
+        element: <Dashbord />,
     },
    
     {

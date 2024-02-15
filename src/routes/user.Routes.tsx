@@ -1,11 +1,12 @@
-import UserDashbord from "../pages/UserDashbord";
+
+import Dashbord from "../pages/flower/Dashbord";
 import FlowerInventory from "../pages/flower/FlowerInventory";
 
 export const UserPaths = [
   {
     name: "Dashboard",
     path: "dashboard",
-    element: <UserDashbord />,
+    element: <Dashbord />,
   },
   {
     name: "Flower Management",
