@@ -155,6 +155,7 @@ const FlowerInventory = () => {
     setParams(data);
   }
 
+
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: TDataType[]) => {
       if (selectedRows.length === 0) {
@@ -165,6 +166,8 @@ const FlowerInventory = () => {
       setDeleteID(selectedRowKeys)
     },
   }
+
+
   const Handledelete = async () => {
     const ids = DeleteID;
     await BulkDeleteflower(ids)
@@ -223,10 +226,10 @@ const FlowerInventory = () => {
           >
             Search...
           </button>
-          <div className="flex justify-end mb-2">
+          {(user as TUser)!.role === 'user' ? "" : <div className="flex justify-end mb-2">
             <button onClick={Handledelete} className={` ${DeleteButton === false ? 'hidden' : 'text-lg text-white font-semibold rounded-lg bg-yellow-600 hover:bg-yellow-700 duration-200 p-2'}`}>
               Select Delete
-            </button></div>
+            </button></div>}
         </div>
       </form>
       <Table

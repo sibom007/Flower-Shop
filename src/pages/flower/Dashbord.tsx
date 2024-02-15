@@ -3,6 +3,7 @@ import Chart from "../Chart";
 import { useSalesinDayQuery, useSalesinMonthQuery, useSalesinWeekQuery, useSalesinYearQuery } from "../../redex/feature/salse/salse";
 import Watch from "../Time/Watch";
 import Timer from "../Time/Timer";
+import { useTodayUserQuery, useTotalUserQuery } from "../../redex/feature/auth/authApi";
 
 const Dashbord = () => {
     const { data: salesDay, isFetching: isFetchingDay } = useSalesinDayQuery(undefined);
@@ -24,6 +25,14 @@ const Dashbord = () => {
         isFetching: isFeatchingYear
     } = useSalesinYearQuery(undefined);
 
+    const {
+        data: TotalUser,
+        isFetching: isFeatchingTUser
+    } = useTotalUserQuery(undefined);
+    const {
+        data: TodayUser,
+        isFetching: isFeatchingTodayUser
+    } = useTodayUserQuery(undefined);
 
 
     return (
@@ -34,12 +43,12 @@ const Dashbord = () => {
                         <h1>Welcome</h1>
                         <Divider />
                         <div className="flex items-center justify-center p-2 ml-4">
-                            <div className="flex-1 text-sm text-[#8c8c8c]">New Login <h1 className="text-xl font-semibold">1000</h1></div>
-                            <div className="flex-1 text-sm text-[#8c8c8c]">New Regester <h1 className="text-xl font-semibold">2000</h1></div>
+                            <div className="flex-1 text-sm text-[#8c8c8c]">Today Regester <h1 className="text-xl font-semibold">{isFeatchingTodayUser ? <Spin /> : TodayUser?.data}</h1></div>
+                            <div className="flex-1 text-sm text-[#8c8c8c]">Login User <h1 className="text-xl font-semibold">{isFeatchingTUser ? <Spin /> : TotalUser?.data}</h1></div>
                             <div className="flex-1 text-sm text-[#8c8c8c]">Time <h1 className="text-xl font-semibold"> <Watch /></h1></div>
                             <div className="flex-1 text-sm text-[#8c8c8c]"><p className="line-clamp-1">How Long you in website</p><h1 className="text-xl font-semibold"><Timer startTime={Math.floor(Date.now() / 1000)} /></h1></div>
                         </div>
-                        <div className="flex justify-center items-center mt-20 mb-20 lg:mt-64"> <Spin size="large" /></div>
+                        <div className="flex justify-center items-center mt-20 mb-20 lg:mt-64"><h1 className="text-2xl mr-5">Comming Soon</h1> <Spin size="large" /></div>
                     </div>
                 </div>
 
