@@ -15,6 +15,12 @@ export type TMeta = {
     total: number;
     totalPage: number;
 };
+export type TDuplicateFlowerdata = {
+    data: any,
+    message: string,
+    success: boolean
+}
+
 
 export type TResponse<T> = {
     data?: T;

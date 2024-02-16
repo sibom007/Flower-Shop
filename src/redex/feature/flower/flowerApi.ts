@@ -8,8 +8,8 @@ const flowerApi = baseApi.injectEndpoints({
         method: "POST",
         body: userInfo,
       }),
-
     }),
+
     getflower: builder.query({
       query: (filters) => {
         let url = '/Flower';
@@ -17,7 +17,6 @@ const flowerApi = baseApi.injectEndpoints({
         if (filters.Searchfild && filters.search) {
           url += `?${filters.Searchfild}=${filters.search}`;
         }
-
         return {
           url: url,
           method: "GET",
@@ -25,12 +24,14 @@ const flowerApi = baseApi.injectEndpoints({
       },
       providesTags: ['Bulkdelete', "SingleDelete", "Updateflower","Sell"],
     }),
+
     getUserflowerById: builder.query({
       query: (id) => ({
         url: `/Flower/userId/${id}`,
         method: "GET",
       }),
     }),
+
     DeleteFlowerById: builder.mutation({
       query: (userinfo) => {
         return {
@@ -40,14 +41,16 @@ const flowerApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["SingleDelete"]
     }),
+
     SingleflowerById: builder.query({
       query: (id) => {
         return {
-        url: `/Flower/${id}`,
+          url: `/Flower/${id.FlowerId}`,
         method: "GET",
         }
       },
     }),
+
     updateflower: builder.mutation({
       query: (userInfo) => ({
         url: `/Flower/${userInfo.id}`,
@@ -56,6 +59,7 @@ const flowerApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Updateflower"]
     }),
+
     BulkDeleteflower: builder.mutation({
       query: (userInfo) => {
         return {
@@ -67,6 +71,7 @@ const flowerApi = baseApi.injectEndpoints({
       invalidatesTags: ["Bulkdelete"]
     }),
   }),
+
 });
 
 export const {

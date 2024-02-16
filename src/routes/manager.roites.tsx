@@ -1,5 +1,6 @@
 import AddFlower from "../pages/flower/AddFlower";
 import Dashbord from "../pages/flower/Dashbord";
+import DuplicateFlower from "../pages/flower/DuplicateFlower";
 import FlowerInventory from "../pages/flower/FlowerInventory";
 import Updateflower from "../pages/flower/Updateflower";
 
@@ -27,6 +28,11 @@ export const ManagerPaths = [
                 name: "",
                 path: "flowerinventory/:FlowerId",
                 element: <Updateflower />,
+            },
+            {
+                name: "",
+                path: "DuplicateFlower/:FlowerId",
+                element: <DuplicateFlower />,
             },
         ],
     },

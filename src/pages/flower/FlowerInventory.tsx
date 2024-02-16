@@ -115,10 +115,12 @@ const FlowerInventory = () => {
       {
         title: 'Duplicate',
         key: 'z',
-        render: () => {
+        render: (Item) => {
           return (
             <div>
+              <Link to={`/manager/DuplicateFlower/${Item.key}`}>
               <Button>Duplicate</Button>
+              </Link>
             </div>
           );
         },
