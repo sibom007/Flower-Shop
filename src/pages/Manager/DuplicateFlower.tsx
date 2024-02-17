@@ -27,20 +27,20 @@ const DuplicateFlower = () => {
             type: data.type,
             size: data.size,
             fragrance: data.fragrance,
+            Fpoint: parseInt(data.Fpoint)
         };
 
         await addflower(Dataneedbacend);
         if (isLoading === true) {
             toast.loading("Loding ...");
         }
-        if (status === "rejected") {
+        if (status === "uninitialized") {
             toast.success("Flower has Add")
             navigate("/manager/flowerinventory")
         }
-        if (status === "uninitialized") {
+        if (status === "rejected") {
             toast.error("Name Should be unick")
         }
-
 
 
 
@@ -100,6 +100,13 @@ const DuplicateFlower = () => {
                         type="date"
                         className="mt-2 p-2 outline-none border-2 rounded focus:border-indigo-500"
                         placeholder="Bloom Date"
+                        required
+                    />
+                    <input
+                        {...register("Fpoint", { required: true })}
+                        type="number"
+                        className="mt-2 p-2 outline-none border-2 rounded focus:border-indigo-500"
+                        placeholder="Fpoint"
                         required
                     />
                     <select

@@ -1,5 +1,5 @@
 import { Button, Table, TableColumnsType } from "antd";
-import { TUser } from "../../types/authSlice.Type";
+import { TUser, TtableUserData } from "../../types/authSlice.Type";
 import { useTotalUserQuery, useUpdateUserRoleMutation } from "../../redex/feature/auth/authApi";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
@@ -91,7 +91,7 @@ const UserManagementMTU = () => {
     const nonAdminUsers = TotalUser?.data?.filter((user: TUser) => user.role !== 'admin');
 
     const tableData = nonAdminUsers?.map(
-        ({ _id, username, email, role }) => ({
+        ({ _id, username, email, role }: TtableUserData) => ({
             key: _id,
             username,
             email,

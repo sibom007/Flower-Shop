@@ -6,6 +6,13 @@ export type TUser = {
   _id: string;
 };
 
+export type TtableUserData = {
+  role: string;
+  _id: string;
+  username:string,
+   email:string,
+};
+
 export type TinitialState = {
   user: null | TUser;
   token: null | string;

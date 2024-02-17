@@ -8,8 +8,9 @@ import { TUser } from "../../types/authSlice.Type";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { useAddsalesMutation } from "../../redex/feature/salse/salse";
+import { useAddsalesMutation, usePointUpdateMutation } from "../../redex/feature/salse/salse";
 import { TResponse } from "../../types/global.Type";
+import { TFlower } from "../../types/Flower.Type";
 
 
 
@@ -36,11 +37,14 @@ const FlowerInventory = () => {
   const [BulkDeleteflower] = useBulkDeleteflowerMutation()
   const [DeleteFlowerById] = useDeleteFlowerByIdMutation()
   const [addsales] = useAddsalesMutation();
+  const [PointUpdate] = usePointUpdateMutation();
   const token = useAppSelector(useCurrentToken);
-  let user;
+  let user: TUser;
   if (token) {
     user = verifyToken(token);
   }
+
+
 
 
   const columns: TableColumnsType<TDataType> = [
@@ -78,7 +82,7 @@ const FlowerInventory = () => {
 
   ];
 
-  if ((user as TUser)!.role === 'user') {
+  if (user!.role === 'user') {
     columns.push(
       {
         title: 'Sell',
@@ -97,7 +101,7 @@ const FlowerInventory = () => {
     );
   }
 
-  if ((user as TUser)!.role === 'manager') {
+  if (user!.role === 'manager') {
     columns.push(
       {
         title: 'Update',
@@ -143,7 +147,7 @@ const FlowerInventory = () => {
 
 
   const tableData = Flowerdata?.data?.map(
-    ({ _id, name, price, quantity, color, size, bloomDate, fragrance }) => ({
+    ({ _id, name, price, quantity, color, size }: TFlower) => ({
       key: _id,
       name,
       price,
@@ -196,6 +200,8 @@ const FlowerInventory = () => {
     if (res?.data?.success === true) {
       toast.success("Sell has Done")
     }
+    const updatepointInfo = { userId: user?._id, FlowerId: inputValueID }
+    await PointUpdate(updatepointInfo)
     setModal2Open(false);
   };
 
@@ -228,10 +234,11 @@ const FlowerInventory = () => {
           >
             Search...
           </button>
-          {(user as TUser)!.role === 'user' ? "" : <div className="flex justify-end mb-2">
+          {user!.role === 'user' ? "" : <div className="flex justify-end mb-2">
             <button onClick={Handledelete} className={` ${DeleteButton === false ? 'hidden' : 'text-lg text-white font-semibold rounded-lg bg-yellow-600 hover:bg-yellow-700 duration-200 p-2'}`}>
               Select Delete
-            </button></div>}
+            </button>
+          </div>}
         </div>
       </form>
       <Table

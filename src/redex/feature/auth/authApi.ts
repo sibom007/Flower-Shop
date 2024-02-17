@@ -29,6 +29,14 @@ const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["userRole"]
     }),
 
+    SingleUser: builder.query({
+      query: (id) => {
+        return{
+        url: `/auth/SingleUser/${id}`,
+        method: "GET",
+      }},
+    }),
+
     TotalUser: builder.query({
       query: () => ({
         url: "/auth/TotalUser",
@@ -48,6 +56,6 @@ const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useRegistersMutation, useTotalUserQuery, useTodayUserQuery, useUpdateUserRoleMutation } = authApi;
+export const { useLoginMutation, useRegistersMutation, useTotalUserQuery, useTodayUserQuery, useUpdateUserRoleMutation,useSingleUserQuery } = authApi;
 
 export default authApi;

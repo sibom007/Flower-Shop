@@ -19,6 +19,7 @@ const AddFlower = () => {
       type: [data.type],
       size: data.size,
       fragrance: data.fragrance,
+      Fpoint: parseInt(data.Fpoint)
     };
     await addflower(Dataneedbacend);
     if (isLoading === true) {
@@ -82,6 +83,13 @@ const AddFlower = () => {
             type="date"
             className="mt-2 p-2 outline-none border-2 rounded focus:border-indigo-500"
             placeholder="Bloom Date"
+            required
+          />
+          <input
+            {...register("Fpoint", { required: true })}
+            type="number"
+            className="mt-2 p-2 outline-none border-2 rounded focus:border-indigo-500"
+            placeholder="Fpoint"
             required
           />
           <select

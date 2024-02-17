@@ -31,6 +31,7 @@ const salseApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Year"]
     }),
+
     salesinWeek: builder.query({
       query: () => ({
         url: "/Flower/sales/week",
@@ -38,6 +39,16 @@ const salseApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Week"]
 
+    }),
+
+    PointUpdate: builder.mutation({
+      query: (args) => {
+        return {
+          url: `/Flower/sales/pointUpdate`,
+          method: "PATCH",
+          body: args
+        }
+      },
     }),
   }),
 });
@@ -48,6 +59,7 @@ export const {
   useSalesinMonthQuery,
   useSalesinWeekQuery,
   useSalesinYearQuery,
+  usePointUpdateMutation
 } = salseApi;
 
 export default salseApi;

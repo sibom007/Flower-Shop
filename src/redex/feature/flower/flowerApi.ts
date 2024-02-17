@@ -8,6 +8,7 @@ const flowerApi = baseApi.injectEndpoints({
         method: "POST",
         body: userInfo,
       }),
+      invalidatesTags: ["Dublect"]
     }),
 
     getflower: builder.query({
@@ -22,7 +23,7 @@ const flowerApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ['Bulkdelete', "SingleDelete", "Updateflower","Sell"],
+      providesTags: ['Bulkdelete', "SingleDelete", "Updateflower","Sell","Dublect"],
     }),
 
     getUserflowerById: builder.query({
