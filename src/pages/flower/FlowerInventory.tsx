@@ -3,7 +3,7 @@ import { useBulkDeleteflowerMutation, useDeleteFlowerByIdMutation, useGetflowerQ
 import React, { useState } from "react";
 import { useAppSelector } from "../../redex/hook";
 import { useCurrentToken } from "../../redex/store";
-import { varyfyToken } from "../../utils/veryfyToken";
+import { verifyToken } from "../../utils/veryfyToken";
 import { TUser } from "../../types/authSlice.Type";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -39,7 +39,7 @@ const FlowerInventory = () => {
   const token = useAppSelector(useCurrentToken);
   let user;
   if (token) {
-    user = varyfyToken(token);
+    user = verifyToken(token);
   }
 
 

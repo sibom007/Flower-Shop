@@ -34,7 +34,6 @@ const Dashbord = () => {
         isFetching: isFeatchingTodayUser
     } = useTodayUserQuery(undefined);
 
-
     return (
         <div className="bg-[#f5f5f5] p-8 ">
             <div className="p-4 rounded-xl flex-row lg:flex space-x-5">
@@ -44,9 +43,9 @@ const Dashbord = () => {
                         <Divider />
                         <div className="flex items-center justify-center p-2 ml-4">
                             <div className="flex-1 text-sm text-[#8c8c8c]">Today Regester <h1 className="text-xl font-semibold">{isFeatchingTodayUser ? <Spin /> : TodayUser?.data}</h1></div>
-                            <div className="flex-1 text-sm text-[#8c8c8c]">Login User <h1 className="text-xl font-semibold">{isFeatchingTUser ? <Spin /> : TotalUser?.data}</h1></div>
+                            <div className="flex-1 text-sm text-[#8c8c8c]">Login User <h1 className="text-xl font-semibold">{isFeatchingTUser ? <Spin /> : TotalUser?.data.length}</h1></div>
                             <div className="flex-1 text-sm text-[#8c8c8c]">Time <h1 className="text-xl font-semibold"> <Watch /></h1></div>
-                            <div className="flex-1 text-sm text-[#8c8c8c]"><p className="line-clamp-1">How Long you in website</p><h1 className="text-xl font-semibold"><Timer startTime={Math.floor(Date.now() / 1000)} /></h1></div>
+                            <div className="flex-1 text-sm text-[#8c8c8c]"><span className="line-clamp-1">How Long you in website</span><h1 className="text-xl font-semibold"><Timer startTime={Math.floor(Date.now() / 1000)} /></h1></div>
                         </div>
                         <div className="flex justify-center items-center mt-20 mb-20 lg:mt-64"><h1 className="text-2xl mr-5">Comming Soon</h1> <Spin size="large" /></div>
                     </div>
@@ -56,7 +55,7 @@ const Dashbord = () => {
                     <div className="shadow-xl rounded-xl"><h1 className="text-center font-bold text-2xl mt-10 underline">
                         Daily Salse
                     </h1>
-                        {isFetchingDay ? <p><Spin /></p> : <Chart data={salesDay?.data} />}
+                        {isFetchingDay ? <div><Spin /></div> : <Chart data={salesDay?.data} />}
                     </div>
 
                     <div className="shadow-xl rounded-xl">

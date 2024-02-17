@@ -1,8 +1,9 @@
-import AddFlower from "../pages/flower/AddFlower";
+import AddFlower from "../pages/Manager/AddFlower";
 import Dashbord from "../pages/flower/Dashbord";
-import DuplicateFlower from "../pages/flower/DuplicateFlower";
+import DuplicateFlower from "../pages/Manager/DuplicateFlower";
 import FlowerInventory from "../pages/flower/FlowerInventory";
-import Updateflower from "../pages/flower/Updateflower";
+import Updateflower from "../pages/Manager/Updateflower";
+import UserManagementMTU from "../pages/Manager/UserManagementMTU";
 
 export const ManagerPaths = [
     {
@@ -33,6 +34,21 @@ export const ManagerPaths = [
                 name: "",
                 path: "DuplicateFlower/:FlowerId",
                 element: <DuplicateFlower />,
+            },
+            {
+                name: "",
+                path: "UserManagement",
+                element: <UserManagementMTU />,
+            },
+        ],
+    },
+    {
+        name: "User Management",
+        children: [
+            {
+                name: "Users",
+                path: "UserManagementMTU",
+                element: <UserManagementMTU />,
             },
         ],
     },

@@ -8,31 +8,36 @@ const salseApi = baseApi.injectEndpoints({
         method: "POST",
         body: userInfo,
       }),
-      invalidatesTags: ["Sell"]
+      invalidatesTags: ["Sell", "Day", "Month", "Week", "Year"],
     }),
     salesinDay: builder.query({
       query: () => ({
         url: "/Flower/sales/daily",
         method: "GET",
       }),
+      providesTags: ["Day"]
     }),
     salesinMonth: builder.query({
       query: () => ({
         url: "/Flower/sales/month",
         method: "GET",
       }),
+      providesTags: ["Month"]
     }),
     salesinYear: builder.query({
       query: () => ({
         url: "/Flower/sales/year",
         method: "GET",
       }),
+      providesTags: ["Year"]
     }),
     salesinWeek: builder.query({
       query: () => ({
         url: "/Flower/sales/week",
         method: "GET",
       }),
+      providesTags: ["Week"]
+
     }),
   }),
 });

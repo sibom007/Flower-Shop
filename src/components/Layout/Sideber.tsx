@@ -4,22 +4,25 @@ import { UserPaths } from "../../routes/user.Routes";
 import { ManagerPaths } from "../../routes/manager.roites";
 import { useAppSelector } from "../../redex/hook";
 import { useCurrentToken } from "../../redex/store";
-import { varyfyToken } from "../../utils/veryfyToken";
+import { verifyToken } from "../../utils/veryfyToken";
 import { TUser } from "../../types/authSlice.Type";
+import { AdminPaths } from "../../routes/admin.routs";
+
 
 
 const { Sider } = Layout;
 
-const userRole = {
+export const userRole = {
   USER: "user",
   MANAGER: "manager",
+  ADMIN: "admin"
 };
 
 const Sideber = () => {
   const token = useAppSelector(useCurrentToken);
   let user;
   if (token) {
-    user = varyfyToken(token);
+    user = verifyToken(token);
   }
   let sideBarRole;
   switch ((user as TUser)!.role) {
@@ -28,6 +31,9 @@ const Sideber = () => {
       break;
     case userRole.MANAGER:
       sideBarRole = sidebarItemsGenater(ManagerPaths, userRole.MANAGER);
+      break;
+    case userRole.ADMIN:
+      sideBarRole = sidebarItemsGenater(AdminPaths, userRole.ADMIN);
       break;
     default:
       break;

@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../redex/hook";
 import { useLoginMutation } from "../redex/feature/auth/authApi";
 import { toast } from "sonner";
-import { varyfyToken } from "../utils/veryfyToken";
+import { verifyToken } from "../utils/veryfyToken";
 import { TInputs } from "../types/Form.Type";
 import { TUser } from "../types/authSlice.Type";
 import { setUser } from "../redex/feature/auth/authSlice";
 const Login = () => {
   const { register, handleSubmit } = useForm<TInputs>();
 
-  const navagate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [login] = useLoginMutation();
 
@@ -23,11 +23,11 @@ const Login = () => {
         password: data.password,
       };
       const res = await login(userInfo).unwrap();
-      console.log(res);
-      const user = varyfyToken(res.data.token) as TUser;
+      const user = verifyToken(res.data.token) as TUser;
+      console.log(user);
       toast.success("Logged in", { id: toastId, duration: 3000 });
       dispatch(setUser({ user: user, token: res.data.token }));
-      navagate(`/user/dashboard`);
+      navigate(`/${user.role}/dashboard`);
     } catch (err) {
       toast.error("somethink is worng !");
     }

@@ -18,11 +18,23 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
 
+    UpdateUserRole: builder.mutation({
+      query: (args) => {
+        return {
+          url: `/auth/updateRole`,
+          method: "PUT",
+          body: args
+        }
+      },
+      invalidatesTags: ["userRole"]
+    }),
+
     TotalUser: builder.query({
       query: () => ({
         url: "/auth/TotalUser",
         method: "GET",
       }),
+      providesTags:["userRole"]
     }),
 
     TodayUser: builder.query({
@@ -36,6 +48,6 @@ const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useRegistersMutation, useTotalUserQuery,useTodayUserQuery } = authApi;
+export const { useLoginMutation, useRegistersMutation, useTotalUserQuery, useTodayUserQuery, useUpdateUserRoleMutation } = authApi;
 
 export default authApi;

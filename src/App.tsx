@@ -3,8 +3,7 @@ import ProtectedRoutes from "./components/Layout/ProtectedRoutes";
 
 const App = () => {
   return (
-    <ProtectedRoutes>
-      {" "}
+    <ProtectedRoutes role={undefined}>
       <MainLayout />
     </ProtectedRoutes>
   );
