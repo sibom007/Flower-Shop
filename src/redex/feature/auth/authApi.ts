@@ -35,6 +35,7 @@ const authApi = baseApi.injectEndpoints({
         url: `/auth/SingleUser/${id}`,
         method: "GET",
       }},
+      providesTags:["point"]
     }),
 
     TotalUser: builder.query({

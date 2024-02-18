@@ -102,6 +102,9 @@ const UserManagementMTU = () => {
 
     return (
         <div className="p-4 m-4 rounded-xl">
+            <h1 className="text-center text-xl font-semibold space-y-5 mt-5 mb-5 md:text-2xl underline">
+                All user
+            </h1>
             <Table
                 loading={isFeatchingTUser}
                 columns={columns}

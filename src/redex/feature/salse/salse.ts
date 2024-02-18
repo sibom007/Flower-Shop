@@ -3,13 +3,38 @@ import { baseApi } from "../../api/baseApi";
 const salseApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     addsales: builder.mutation({
-      query: (userInfo) => ({
-        url: "/Flower/sales",
-        method: "POST",
-        body: userInfo,
-      }),
-      invalidatesTags: ["Sell", "Day", "Month", "Week", "Year"],
+      query: (userInfo) => {
+        return {
+          url: "/Flower/sales",
+          method: "POST",
+          body: userInfo,
+        }
+      },
+      invalidatesTags: ["Sell", "Day", "Month", "Week", "Year", "point"],
     }),
+
+    createCoupon: builder.mutation({
+      query: (userInfo) => {
+        return {
+          url: "/Flower/sales/createCoupon",
+          method: "POST",
+          body: userInfo,
+        }
+      },
+      invalidatesTags: ["Coupon"]
+    }),
+
+    getCoupon: builder.query({
+      query: () => (
+        {
+          url: "/Flower/sales/getCoupon",
+          method: "GET",
+        }
+      ),
+      providesTags: ["Coupon"]
+    }),
+
+
     salesinDay: builder.query({
       query: () => ({
         url: "/Flower/sales/daily",
@@ -17,6 +42,7 @@ const salseApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Day"]
     }),
+
     salesinMonth: builder.query({
       query: () => ({
         url: "/Flower/sales/month",
@@ -38,7 +64,6 @@ const salseApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Week"]
-
     }),
 
     PointUpdate: builder.mutation({
@@ -59,7 +84,9 @@ export const {
   useSalesinMonthQuery,
   useSalesinWeekQuery,
   useSalesinYearQuery,
-  usePointUpdateMutation
+  usePointUpdateMutation,
+  useCreateCouponMutation,
+  useGetCouponQuery,
 } = salseApi;
 
 export default salseApi;

@@ -1,5 +1,5 @@
 import UserManagementATM from "../pages/Admin/UserManagementATM";
-import Dashbord from "../pages/flower/Dashbord";
+import Dashbord from "../pages/Dashbord";
 
 
 export const AdminPaths = [

@@ -206,11 +206,14 @@ const FlowerInventory = () => {
   };
 
   return (
-    <div className="p-20">
+    <div className="p-10 mt-0">
+      <h1 className="text-center text-xl font-semibold space-y-5 mt-5 mb-5 md:text-2xl underline">
+        All Book
+      </h1>
       <form className="flex justify-end" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <select
-            className="block w-[320px] mb-2 px-4 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            className="block w-[320px] mb-2 px-4 py-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             {...register("Searchfild")}
           >
             <option value="">Select Data</option>

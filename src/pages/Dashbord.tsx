@@ -1,12 +1,16 @@
-import { Divider, Progress, Spin } from "antd";
-import Chart from "../Chart";
-import { useSalesinDayQuery, useSalesinMonthQuery, useSalesinWeekQuery, useSalesinYearQuery } from "../../redex/feature/salse/salse";
-import Watch from "../Time/Watch";
-import Timer from "../Time/Timer";
-import { useTodayUserQuery, useTotalUserQuery } from "../../redex/feature/auth/authApi";
+import { Divider, Spin } from "antd";
+import Chart from "./Chart";
+import { useSalesinDayQuery, useSalesinMonthQuery, useSalesinWeekQuery, useSalesinYearQuery } from "../redex/feature/salse/salse";
+import Watch from "./Time/Watch";
+import Timer from "./Time/Timer";
+import { useSingleUserQuery, useTodayUserQuery, useTotalUserQuery } from "../redex/feature/auth/authApi";
+import { useAppSelector } from "../redex/hook";
+import { selectCurrentUser } from "../redex/store";
 
 const Dashbord = () => {
+    const user = useAppSelector(selectCurrentUser)
     const { data: salesDay, isFetching: isFetchingDay } = useSalesinDayQuery(undefined);
+    const { data: userData } = useSingleUserQuery(user?._id)
 
     const {
         data: salesWeek,
@@ -19,7 +23,6 @@ const Dashbord = () => {
 
     } = useSalesinMonthQuery(undefined);
 
-
     const {
         data: salesYear,
         isFetching: isFeatchingYear
@@ -29,6 +32,7 @@ const Dashbord = () => {
         data: TotalUser,
         isFetching: isFeatchingTUser
     } = useTotalUserQuery(undefined);
+
     const {
         data: TodayUser,
         isFetching: isFeatchingTodayUser
@@ -52,17 +56,17 @@ const Dashbord = () => {
                 </div>
 
                 <div className="basis-2/6">
-                    <div className="shadow-xl rounded-xl"><h1 className="text-center font-bold text-2xl mt-10 underline">
-                        Daily Salse
-                    </h1>
-                        {isFetchingDay ? <div><Spin /></div> : <Chart data={salesDay?.data} />}
+                    <div className="shadow-xl rounded-xl h-44 ">
+                        <h1 className="text-center font-bold text-2xl mt-10 underline">User info</h1>
+                        {user?.role === "user" ? <p className="text-lg p-4 font-medium">Point: <span className="text-green-500">{userData?.data?.UFpoint}</span></p> : ""}
+                        <p className="text-2xl font-semibold text-center mt-8">comming soon ... <Spin /></p>
                     </div>
 
                     <div className="shadow-xl rounded-xl">
                         <h1 className="text-center font-bold text-2xl mt-10 underline">
-                            Weekly Salse
+                            Daily Salse
                         </h1>
-                        {isFetchingWeek ? <p><Spin /></p> : <Chart data={salesWeek?.data} />}
+                        {isFetchingDay ? <div><Spin /></div> : <Chart data={salesDay?.data} />}
                     </div>
 
                 </div>
@@ -70,9 +74,17 @@ const Dashbord = () => {
 
 
             <div className="flex-row lg:flex gap-4 mt-4">
-                <div className="shadow-xl rounded-xl basis-2/6"><h1 className="text-center font-bold text-2xl mt-10 underline">
-                    MonthLy Salse
-                </h1>
+                <div className="shadow-xl rounded-xl basis-2/6">
+                    <h1 className="text-center font-bold text-2xl mt-10 underline">
+                        Weekly Salse
+                    </h1>
+                    {isFetchingWeek ? <p><Spin /></p> : <Chart data={salesWeek?.data} />}
+                </div>
+
+                <div className="shadow-xl rounded-xl basis-2/6">
+                    <h1 className="text-center font-bold text-2xl mt-10 underline">
+                        MonthLy Salse
+                    </h1>
                     {isFetchingMonth ? <p><Spin /></p> : <Chart data={salesMonth?.data} />}
                 </div>
 
@@ -82,16 +94,6 @@ const Dashbord = () => {
                     </h1>
                     {isFeatchingYear ? <p><Spin /></p> : <Chart data={salesYear?.data} />}
                 </div>
-
-                <div className="shadow-xl rounded-xl basis-2/6">
-                    <h1 className="text-center font-bold text-2xl mt-10 underline">Proportion of each category</h1>
-                    <div className="flex gap-14 justify-center items-center mt-11 pb-10  lg:mt-14">
-                        <Progress type="circle" percent={75} />
-                        <Progress type="circle" percent={39} />
-                        <Progress type="circle" percent={100} />
-                    </div>
-                </div>
-
             </div>
         </div>
     );

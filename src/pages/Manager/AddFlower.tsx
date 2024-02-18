@@ -31,7 +31,7 @@ const AddFlower = () => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-5 h-screen">
-        <h1 className="text-center text-xl font-semibold space-y-5 mt-5 mb-5 md:text-2xl">
+        <h1 className="text-center text-xl font-semibold space-y-5 mt-5 mb-5 md:text-2xl underline">
           Add Your Own Book
         </h1>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mx-24 ">

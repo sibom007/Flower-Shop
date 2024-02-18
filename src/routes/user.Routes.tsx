@@ -1,5 +1,5 @@
 
-import Dashbord from "../pages/flower/Dashbord";
+import Dashbord from "../pages/Dashbord";
 import FlowerInventory from "../pages/flower/FlowerInventory";
 
 export const UserPaths = [
