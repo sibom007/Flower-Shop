@@ -1,5 +1,5 @@
 import { Button, Modal, Table, TableColumnsType } from "antd";
-import { useBulkDeleteflowerMutation, useDeleteFlowerByIdMutation, useGetflowerQuery } from "../../redex/feature/flower/flowerApi";
+import { useBulkDeleteflowerMutation, useDeleteFlowerByIdMutation, useGetflowerQuery, useSingleflowerByIdQuery } from "../../redex/feature/flower/flowerApi";
 import React, { useState } from "react";
 import { useAppSelector } from "../../redex/hook";
 import { useCurrentToken } from "../../redex/store";
@@ -8,7 +8,7 @@ import { TUser } from "../../types/authSlice.Type";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { useAddsalesMutation, usePointUpdateMutation } from "../../redex/feature/salse/salse";
+import { useAddsalesMutation, usePointUpdateMutation, useVaryfyCouponQuery } from "../../redex/feature/salse/salse";
 import { TResponse } from "../../types/global.Type";
 import { TFlower } from "../../types/Flower.Type";
 
@@ -29,7 +29,29 @@ export type TDataType = {
 
 
 const FlowerInventory = () => {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, reset } = useForm()
+  const [modal2Open, setModal2Open] = useState(false);
+  const [QuantityValue, setQuantityValue] = useState("");
+  const [FlowerValueID, setFlowerValueID] = useState("");
+  const [SingleflowerByIdSt, setSingleflowerByIdSt] = useState(true)
+  const [CouponVeryfyskip, setCouponVeryfyskip] = useState(true)
+  const [CouponValue, setCouponValue] = useState("");
+
+  const { data: SingleFlower } = useSingleflowerByIdQuery(FlowerValueID, { skip: SingleflowerByIdSt })
+  const { data: veryfycuponCode } = useVaryfyCouponQuery(CouponValue, { skip: CouponVeryfyskip })
+
+
+
+  const Handlecopun = (data: FieldValues) => {
+    setCouponValue(data.Copuns);
+    setCouponVeryfyskip(false)
+    reset()
+  }
+
+  const flowerprice = SingleFlower?.data[0].price * Number(QuantityValue) || 0
+  const CouponDiscount = veryfycuponCode?.data.CouponDiscount || 0
+  const TotalAmount = flowerprice - CouponDiscount || 0
+
   const [DeleteButton, setDeleteButton] = useState(false)
   const [DeleteID, setDeleteID] = useState<React.Key[]>([])
   const [Params, setParams] = useState({})
@@ -91,8 +113,7 @@ const FlowerInventory = () => {
           return (
             <div>
               <Button
-                onBlur={() => setInputValueID(items.key)}
-                onClick={() => setModal2Open(true)}
+                onClick={() => { setModal2Open(true), setFlowerValueID(items.key), setSingleflowerByIdSt(false) }}
               >Sell</Button>
             </div>
           );
@@ -184,25 +205,24 @@ const FlowerInventory = () => {
     toast.success("Flower is Deleted")
   }
 
-
-  const [modal2Open, setModal2Open] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [inputValueID, setInputValueID] = useState("");
-
-  const handleInputChange = (e: FieldValues) => {
-    setInputValue(e.target.value);
+  const handleQuantityValueChange = (e: FieldValues) => {
+    setQuantityValue(e.target.value);
   };
+
   const handleOk = async () => {
     const res = await addsales({
-      flowerId: inputValueID,
-      quantitySold: parseInt(inputValue),
+      flowerId: FlowerValueID,
+      quantitySold: parseInt(QuantityValue),
     }) as TResponse<any>;
     if (res?.data?.success === true) {
       toast.success("Sell has Done")
     }
-    const updatepointInfo = { userId: user?._id, FlowerId: inputValueID }
+    const updatepointInfo = { userId: user?._id, FlowerId: FlowerValueID }
     await PointUpdate(updatepointInfo)
     setModal2Open(false);
+  };
+  const handleCancel = () => {
+    setModal2Open(false)
   };
 
   return (
@@ -258,17 +278,30 @@ const FlowerInventory = () => {
         centered
         open={modal2Open}
         onOk={handleOk}
-        onCancel={() => setModal2Open(false)}
+        onCancel={handleCancel}
       >
         <p className="ml-7 mb-2 text-lg font-semibold">Quantity</p>
         <p className="text-center">
           <input
             className="p-2 w-[420px] bg-[#eae8dc] rounded-lg"
             type="number"
-            value={inputValue}
-            onChange={handleInputChange}
+            onChange={handleQuantityValueChange}
           />
         </p>
+        <p className="ml-7 mb-2 text-lg font-semibold">Coupon Code</p>
+        <form onSubmit={handleSubmit(Handlecopun)} className="text-center">
+          <input
+            className="p-2 w-[420px] bg-[#eae8dc] rounded-lg"
+            type="text"
+            {...register("Copuns")}
+          />
+          <button className="bg-yellow-600 text-base font-semibold text-slate-300 px-4 py-2 ml-72 mt-2 rounded-md" type="submit">Checkout.</button>
+        </form>
+        <div className="text-lg font-semibold ml-6">
+          <h1>Flower Price : {flowerprice}</h1>
+          <h1>Discount Amount : {CouponDiscount}</h1>
+          <h1>Total Amount : {TotalAmount}</h1>
+        </div>
       </Modal>
     </div>
 

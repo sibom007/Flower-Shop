@@ -46,7 +46,7 @@ const flowerApi = baseApi.injectEndpoints({
     SingleflowerById: builder.query({
       query: (id) => {
         return {
-          url: `/Flower/${id.FlowerId}`,
+          url: `/Flower/${id}`,
         method: "GET",
         }
       },

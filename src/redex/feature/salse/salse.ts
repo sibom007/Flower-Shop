@@ -34,6 +34,15 @@ const salseApi = baseApi.injectEndpoints({
       providesTags: ["Coupon"]
     }),
 
+    VaryfyCoupon: builder.query({
+      query: (CouponCode) => {
+        return {
+          url: `/Flower/sales/varyfyCoupon/${CouponCode}`,
+          method: "GET",
+        }
+      },
+    }),
+
 
     salesinDay: builder.query({
       query: () => ({
@@ -87,6 +96,7 @@ export const {
   usePointUpdateMutation,
   useCreateCouponMutation,
   useGetCouponQuery,
+  useVaryfyCouponQuery,
 } = salseApi;
 
 export default salseApi;
