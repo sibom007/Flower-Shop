@@ -10,8 +10,7 @@ const DuplicateFlower = () => {
     const user = useAppSelector(selectCurrentUser);
     const params = useParams()
     const navigate = useNavigate()
-    const { data: SingleFlower } = useSingleflowerByIdQuery(params)
-
+    const { data: SingleFlower } = useSingleflowerByIdQuery(params.FlowerId)
     const { register, handleSubmit } = useForm({ values: SingleFlower?.data[0] });
     const [addflower, { status, isLoading }] = useAddflowerMutation();
 

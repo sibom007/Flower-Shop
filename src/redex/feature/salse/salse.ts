@@ -83,6 +83,7 @@ const salseApi = baseApi.injectEndpoints({
           body: args
         }
       },
+      invalidatesTags: ["point"]
     }),
   }),
 });
