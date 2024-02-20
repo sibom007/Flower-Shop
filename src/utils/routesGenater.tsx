@@ -1,7 +1,7 @@
 import { TRoute, TUserPath } from "../types/sidebar.Type";
 
-export const routesGenater = (item: TUserPath[]) => {
-  const RoutesPath = item.reduce((acc: TRoute[], item) => {
+export const routeGenerator = (items: TUserPath[]) => {
+  const routes = items.reduce((acc: TRoute[], item) => {
     if (item.path && item.element) {
       acc.push({
         path: item.path,
@@ -20,5 +20,9 @@ export const routesGenater = (item: TUserPath[]) => {
 
     return acc;
   }, []);
-  return RoutesPath;
+
+  return routes;
 };
+
+
+

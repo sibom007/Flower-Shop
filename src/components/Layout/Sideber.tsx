@@ -1,5 +1,4 @@
 import { Layout, Menu } from "antd";
-import { sidebarItemsGenater } from "../../utils/sideBargenater";
 import { UserPaths } from "../../routes/user.Routes";
 import { ManagerPaths } from "../../routes/manager.roites";
 import { useAppSelector } from "../../redex/hook";
@@ -7,12 +6,10 @@ import { useCurrentToken } from "../../redex/store";
 import { verifyToken } from "../../utils/veryfyToken";
 import { TUser } from "../../types/authSlice.Type";
 import { AdminPaths } from "../../routes/admin.routs";
-
-
-
+import { sidebarItemsGenerator } from "../../utils/sideBargenater";
 const { Sider } = Layout;
 
-export const userRole = {
+export const USERRole = {
   USER: "user",
   MANAGER: "manager",
   ADMIN: "admin"
@@ -24,20 +21,25 @@ const Sideber = () => {
   if (token) {
     user = verifyToken(token);
   }
-  let sideBarRole;
+  let sidebarItems
+
   switch ((user as TUser)!.role) {
-    case userRole.USER:
-      sideBarRole = sidebarItemsGenater(UserPaths, userRole.USER);
+    case USERRole.ADMIN:
+      sidebarItems = sidebarItemsGenerator(AdminPaths, USERRole.ADMIN);
       break;
-    case userRole.MANAGER:
-      sideBarRole = sidebarItemsGenater(ManagerPaths, userRole.MANAGER);
+
+    case USERRole.MANAGER:
+      sidebarItems = sidebarItemsGenerator(ManagerPaths, USERRole.MANAGER);
       break;
-    case userRole.ADMIN:
-      sideBarRole = sidebarItemsGenater(AdminPaths, userRole.ADMIN);
+
+    case USERRole.USER:
+      sidebarItems = sidebarItemsGenerator(UserPaths, USERRole.USER);
       break;
+
     default:
       break;
   }
+
   return (
     <Sider
       breakpoint="lg"
@@ -76,10 +78,12 @@ const Sideber = () => {
         style={{ background: "#eae8dc" }}
         mode="inline"
         defaultSelectedKeys={["4"]}
-        items={sideBarRole}
+        items={sidebarItems}
       />
     </Sider>
+
   );
 };
 
 export default Sideber;
+

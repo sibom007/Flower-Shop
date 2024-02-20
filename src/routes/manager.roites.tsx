@@ -27,17 +27,14 @@ export const ManagerPaths = [
                 element: <AddFlower />,
             },
             {
-                name: "",
                 path: "flowerinventory/:FlowerId",
                 element: <Updateflower />,
             },
             {
-                name: "",
                 path: "DuplicateFlower/:FlowerId",
                 element: <DuplicateFlower />,
             },
             {
-                name: "",
                 path: "UserManagement",
                 element: <UserManagementMTU />,
             },
